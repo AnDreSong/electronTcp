@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCP 调试助手</title>
+    <link rel="stylesheet" href="styles/main.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div>
+          <h1>TCP 调试助手</h1>
+          <p>跨平台 TCP 客户端 / 服务端收发和编码调试</p>
+        </div>
+        <button id="themeToggle" class="icon-button" type="button" title="切换深浅主题" aria-label="切换深浅主题">深色</button>
+      </header>
+
+      <section class="panel connection-panel" aria-label="连接配置">
+        <div class="mode-toggle" role="radiogroup" aria-label="运行模式">
+          <label class="mode-option">
+            <input type="radio" name="connectionMode" value="client" checked>
+            <span>客户端</span>
+          </label>
+          <label class="mode-option">
+            <input type="radio" name="connectionMode" value="server">
+            <span>服务端</span>
+          </label>
+        </div>
+        <label class="field field-host">
+          <span id="hostLabel">服务器地址</span>
+          <input id="hostInput" type="text" value="127.0.0.1" placeholder="192.168.1.100" autocomplete="off">
+        </label>
+        <label class="field field-port">
+          <span>端口</span>
+          <input id="portInput" type="number" value="8080" min="1" max="65535" step="1" placeholder="8080">
+        </label>
+        <button id="connectBtn" class="button primary" type="button">连接</button>
+        <div id="statusIndicator" class="status disconnected" role="status" aria-live="polite">
+          <span class="status-dot"></span>
+          <span id="statusText">未连接</span>
+        </div>
+      </section>
+
+      <section class="panel encoding-panel" aria-label="编码设置">
+        <label class="field">
+          <span>发送编码</span>
+          <select id="sendEncoding">
+            <option value="utf8">UTF-8</option>
+            <option value="ascii">ASCII</option>
+            <option value="gbk">GBK</option>
+            <option value="latin1">Latin-1</option>
+            <option value="hex">十六进制</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>接收编码</span>
+          <select id="recvEncoding">
+            <option value="utf8" selected>UTF-8</option>
+            <option value="ascii">ASCII</option>
+            <option value="gbk">GBK</option>
+            <option value="latin1">Latin-1</option>
+            <option value="hex">十六进制</option>
+            <option value="ascii-hex">ASCII + 十六进制</option>
+          </select>
+        </label>
+        <label class="check-field">
+          <input id="appendNewline" type="checkbox">
+          <span>发送时追加换行</span>
+        </label>
+        <label class="check-field">
+          <input id="autoScroll" type="checkbox" checked>
+          <span>接收区自动滚动</span>
+        </label>
+      </section>
+
+      <section class="workspace-grid">
+        <section class="panel send-section" aria-label="发送数据">
+          <div class="section-header">
+            <h2>发送数据</h2>
+            <span id="sendByteHint" class="muted">0 字节</span>
+          </div>
+          <label id="targetField" class="field target-field hidden">
+            <span>发送目标</span>
+            <select id="targetClient">
+              <option value="all">所有客户端</option>
+            </select>
+          </label>
+          <textarea id="sendInput" spellcheck="false" placeholder="输入要发送的数据。十六进制可写成 48 65 6C 6C 6F"></textarea>
+          <div class="action-row">
+            <button id="sendBtn" class="button success" type="button" disabled>发送</button>
+            <button id="clearSendBtn" class="button secondary" type="button">清空</button>
+          </div>
+        </section>
+
+        <section class="panel recv-section" aria-label="接收数据">
+          <div class="section-header">
+            <h2>接收数据</h2>
+            <div class="stat-actions">
+              <span class="muted">接收 <b id="recvCount">0</b> 字节</span>
+              <button id="clearRecvBtn" class="button secondary compact" type="button">清空</button>
+              <button id="exportBtn" class="button secondary compact" type="button">导出</button>
+            </div>
+          </div>
+          <pre id="recvOutput" class="terminal-output" aria-live="polite"></pre>
+        </section>
+      </section>
+
+      <section class="panel log-section" aria-label="日志">
+        <div class="section-header">
+          <h2>日志</h2>
+          <button id="clearLogBtn" class="button secondary compact" type="button">清空日志</button>
+        </div>
+        <div id="logOutput" class="log-output" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <script src="renderer/app.js"></script>
+  </body>
+</html>
